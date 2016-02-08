@@ -2,19 +2,22 @@
 <html ng-app="myApp">
 <head>
 	<title>Working with JSON and filters</title>
-	<link rel="stylesheet" href="style.css" />
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
-	<script src="dirPagination.js"></script>
-	<script src="angular-fusioncharts.min.js"></script>
-	<!--<script src="app.js"></script>-->
+	<link rel="stylesheet" href="css/style.css" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/angular-chart.css">
+	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+	<script src="js/dirPagination.js"></script>
+	<script src="js/Chart.js"></script>
+	<script src="js/angular-chart.js"></script>
+	<!--<script src="app.js"></script>-->
 </head>
 <body>
 	<div>
 		<p>Records <input type="text" placeholder="Search records" ng-model='query'> <span>Total records : 21638<!--{{information.length}}--></span></p>
 	</div>
 	<div ng-controller = "myCtrl">
-		<table>
+		<table class="table">
 		<tr>
 			<th>ID</th> 
 			<th>YEAR</th>                 
@@ -37,51 +40,40 @@
 			boundary-links="true" >
 		</dir-pagination-controls>	
 	</div>
-	<div ng-controller="MyController">
- 	<div fusioncharts
-      width="600"
-      height="400"
-      type="column2d"
-      dataSource="{{myDataSource}}" >
- 	</div>
-	</div>
+	<canvas id="line" class="chart chart-line" chart-data="data"
+  chart-labels="labels" chart-legend="true" chart-series="series"
+  chart-click="onClick" >
+</canvas> 
 </div>
 <script>
-	var app = angular.module('myApp', ['angularUtils.directives.dirPagination', "ng-fusioncharts"]);
+	var app = angular.module('myApp', ['angularUtils.directives.dirPagination','chart.js']);
 	app.controller('myCtrl', function myCtrl ($scope, $http) {
 		$http.get('Class(Feb5th).json').success(function(data){
 			$scope.information = [];		
 			$scope.information = data;
+			$scope.labels = Object.keys(data[0]);
+			var education = [];
+			var vocabulary = [];
+			var chartlabels = [];
+
+			$scope.chartlabels=[];
+			
+			for (var i =0; i < 50; i++){ 
+				education.push(data[i]["education"]);
+			}
+			
+			for (var i =0; i < 50; i++){ 
+				vocabulary.push(data[i]["vocabulary"]);
+			}
+			
+			for (var i =0; i < 10; i++){ 
+				chartlabels.push(data[i]["id"]);
+			}
+			$scope.chartlabels =chartlabels
+			$scope.chartdata = [education, vocabulary];
+			$scope.series = ["Education , Vocabulary"]
 		});			
 	});
-	app.controller('MyController', function ($scope) {
-  $scope.myDataSource = {
-    chart: {
-        caption: "Harry's SuperMart",
-        subCaption: "Top 5 stores in last month by revenue",
-    },
-    data:[{
-        label: "Bakersfield Central",
-        value: "880000"
-    },
-    {
-        label: "Garden Groove harbour",
-        value: "730000"
-    },
-    {
-        label: "Los Angeles Topanga",
-        value: "590000"
-    },
-    {
-        label: "Compton-Rancho Dom",
-        value: "520000"
-    },
-    {
-        label: "Daly City Serramonte",
-        value: "330000"
-    }]
-  };
-});
 </script>
 
 </body>
