@@ -40,7 +40,7 @@
 			boundary-links="true" >
 		</dir-pagination-controls>	
 	</div>
-	<canvas id="line" class="chart chart-line" chart-data="data"
+	<canvas id="line" class="chart chart-line" chart-data="dataForChart"
   chart-labels="labels" chart-legend="true" chart-series="series"
   chart-click="onClick" >
 </canvas> 
@@ -70,7 +70,7 @@
 				chartlabels.push(data[i]["id"]);
 			}
 			$scope.chartlabels =chartlabels
-			$scope.chartdata = [education, vocabulary];
+			$scope.dataForChart = [education, vocabulary];
 			$scope.series = ["Education , Vocabulary"]
 		});			
 	});
